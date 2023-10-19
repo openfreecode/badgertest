@@ -1,4 +1,4 @@
-module bt
+module github.com/openfreecode/bt
 
 go 1.21.2
 
