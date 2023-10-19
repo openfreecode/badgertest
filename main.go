@@ -9,10 +9,6 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 )
 
-// bg gen -dir /tmp/badgergo -count 1000000 -keysize 10 -valsize 100
-// bg read -dir /tmp/badgergo -key hello
-// bg write -dir /tmp/badgergo -key hello -value world
-
 type Options struct {
 	Dir     string
 	Key     string
@@ -113,6 +109,10 @@ func read(db *badger.DB, opts Options) error {
 	return db.View(func(txn *badger.Txn) error {
 		item, err := txn.Get([]byte(opts.Key))
 		if err != nil {
+			if err == badger.ErrKeyNotFound {
+				println("key not found")
+				return nil
+			}
 			return err
 		}
 		item.Value(func(val []byte) error {
